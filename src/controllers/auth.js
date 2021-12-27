@@ -40,16 +40,14 @@ export default class authController {
           }
           else {
             function getMessage() {
-              const Body = `Dear ${full_names} Your Username is : ${email} <br> and is Password : ${sendPassword} <br>
+              const Body = `Dear ${full_names} Your Username is : ${email} <br> and Password is : ${sendPassword} <br>
               <br>
               Please keep your credentials safe for security reasons
               <br>
-              If you have any questions please refer to 
-              <a href="http://audioshic.netlify.app >this link</a>
               `;
               return {
                 to: email, // Change to your recipient
-                from: 'christiannseko@gmail.com', // Change to your verified sender
+                from: 'akashichris7@gmail.com', // Change to your verified sender
                 subject: 'Account credentials',
                 text: Body,
                 html: `<strong>${Body}</strong>`,
@@ -77,10 +75,9 @@ export default class authController {
                   connection.release();
                 });
               } catch (error) {
-                console.log("Error", error);
                 res.send({
                   status: 300,
-                  message: error
+                  message: "Error sending Email"
                 });
               }
             }
@@ -121,7 +118,6 @@ export default class authController {
               let employer = '1';
               const { id, full_names, company, phone } = result[0];
               const token = sign({ id, full_names, company, phone, employer }, process.env.JWT_SECRET, { expiresIn: "10d" });
-
               res.send({
                 status: 200,
                 token
@@ -129,6 +125,37 @@ export default class authController {
 
             }
             connection.release();
+          }
+        });
+      }
+    });
+  }
+
+  static addCategories(req, res) {
+    const { categoryName } = req.body;
+    db.getConnection((err, connection) => {
+      if (err) console.log("connectionError", err);
+      else {
+        connection.query("SELECT * FROM job_category WHERE category_name LIKE N? ", [`${categoryName}`], (err, result) => {
+          if (err) console.log("querryError", err);
+          else if (result.length > 0) {
+            res.send({
+              status: 300,
+              message: "Category arleady exist"
+            });
+          }
+          else {
+            connection.query("INSERT INTO job_category SET?", {
+              category_name: categoryName
+            }, (err, result) => {
+              if (err) console.log("querryError", err);
+              else {
+                res.send({
+                  status: 200,
+                  message: "Category registered"
+                });
+              }
+            });
           }
         });
       }

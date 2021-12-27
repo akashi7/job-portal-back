@@ -37,6 +37,7 @@ userRouter.get("/viewAllJobs",
 userRouter.get('/oneJob', isLoggedIn.isEmployerLoggedIn, userController.viewOneJob);
 userRouter.get('/allApplicants', isLoggedIn.isEmployerLoggedIn, userController.viewApplicants);
 userRouter.get('/oneApplicant', isLoggedIn.isEmployerLoggedIn, userController.viewOneApplicant);
+userRouter.delete("/removeJob", isLoggedIn.isEmployerLoggedIn, userController.expireDate);
 
 
 

@@ -13,7 +13,7 @@ export default class isLoggedIn {
       if (err) res.send({ status: 401, mesage: "Login first" });
       else {
         const { employer } = decoded;
-        if (employer !== 1) {
+        if (employer !== '1') {
           res.send({ status: 401, mesage: "Login first" });
         }
         else {

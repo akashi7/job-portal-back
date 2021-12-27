@@ -29,6 +29,7 @@ export default class validation {
   }
 
   static updatePassValidation(req, res, next) {
+    console.log("bodey", req.body);
     const { password } = req.body;
     const { error } = appSchema.updatePassword.validate({ password });
     if (error) {
@@ -53,8 +54,8 @@ export default class validation {
   }
 
   static applyJobValidation(req, res, next) {
-    const { fullNames, email, phone, experience, motivation } = req.body;
-    const { error } = appSchema.postApplication.validate({ fullNames, email, phone, experience, motivation });
+    const { fullNames, email, phone, experience } = req.body;
+    const { error } = appSchema.postApplication.validate({ fullNames, email, phone, experience });
     if (error) {
       res.send({
         status: 409,

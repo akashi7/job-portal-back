@@ -71,15 +71,19 @@ export default class userController {
     let postionNumber, newPositions;
 
     const { id, full_names, company } = req.user;
-    const { jobCategory, jobType, document = {}, jobTitle, description, experience } = req.body;
+    const { jobCategory, jobType, jobTitle, description, experience, deadLine } = req.body;
+    const { document = {} } = req.files;
 
     const Dates = new Date();
     const TodayMoment = Dates.toLocaleDateString();
     const Today = moment(TodayMoment).format("DD/MM/YYYY");
 
+    const Deadline = moment(deadLine).format("DD/MM/YYYY");
+
     const JobDocument = await uploadJobDoc(document);
 
-    if (JobDocument || !JobDocument) {
+
+    if (JobDocument) {
       db.getConnection((err, connection) => {
         if (err) console.log("connectionError", err);
         else {
@@ -93,7 +97,8 @@ export default class userController {
             posted_on: Today,
             description,
             job_title: jobTitle,
-            experience
+            experience,
+            expiry_date: Deadline
           }, (err, result) => {
             if (err) console.log("QuerryError", err);
             else {
@@ -133,7 +138,7 @@ export default class userController {
     db.getConnection((err, connection) => {
       if (err) console.log("connectionError", err);
       else {
-        connection.query("SELECT * FROM jobs WHERE emp_id=?", [id], (err, result) => {
+        connection.query("SELECT * FROM jobs WHERE emp_id=? ORDER BY id DESC", [id], (err, result) => {
           if (err) console.log("querryError", err);
           else {
             res.send({
@@ -195,18 +200,62 @@ export default class userController {
         connection.query("SELECT * FROM applications WHERE id=?", [userId], (err, result) => {
           if (err) console.log("querryError", err);
           else {
-            res.send({
-              status: 200,
-              data: { applicants: result }
+            let status = 'viewed';
+            connection.query("UPDATE applications SET status=? WHERE id=?", [status, userId], (err, results) => {
+              if (err) console.log("querryError", err);
+              else {
+                res.send({
+                  status: 200,
+                  data: { applicant: result }
+                });
+              }
+              connection.release();
             });
           }
-          connection.release();
         });
       }
     });
   }
 
+  static expireDate(req, res) {
 
+    const { jobId } = req.query;
+    let postionNumber, newPositions;
 
+    db.getConnection((err, connection) => {
+      if (err) console.log("connectionError", err);
+      else {
+        connection.query("SELECT * FROM jobs WHERE id=?", [jobId], (err, result) => {
+          if (err) console.log("querryError", err);
+          else {
+            const { job_category } = result[0];
+            connection.query("SELECT * from job_category WHERE category_name=?", [job_category], (err, results) => {
+              if (err) console.log("querryError", err);
+              else {
+                const { positions } = results[0];
+                positions === null ? postionNumber = 0 : postionNumber = positions;
+                newPositions = parseInt(postionNumber) - 1;
 
+                connection.query("UPDATE job_category SET positions=? WHERE category_name=?", [newPositions, job_category], (err, resultss) => {
+                  if (err) console.log("QuerryError", err);
+                  else {
+                    connection.query("DELETE FROM jobs WHERE id=?", [jobId], (err, resultz) => {
+                      if (err) console.log("QuerryError", err);
+                      else {
+                        res.send({
+                          status: 200,
+                          message: "Job removed succesfully"
+                        });
+                      }
+                      connection.release();
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 }

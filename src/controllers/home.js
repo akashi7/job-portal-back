@@ -49,7 +49,7 @@ export default class homeController {
     db.getConnection((err, connection) => {
       if (err) console.log("ConnectionError", err);
       else {
-        connection.query("SELECT * FROM jobs WHERE  job_category =? ", [categoryName], (err, result) => {
+        connection.query("SELECT * FROM jobs WHERE  job_category =? ORDER BY id DESC ", [categoryName], (err, result) => {
           if (err) console.log("QuerryError", err);
           else {
             res.send({
@@ -74,7 +74,7 @@ export default class homeController {
           else {
             res.send({
               status: 200,
-              data: { jobDetails: result }
+              data: { OneJob: result }
             });
           }
           connection.release();
@@ -88,7 +88,8 @@ export default class homeController {
 
     const { id } = req.query;
 
-    const { fullNames, email, phone, resume = {}, experience, motivation } = req.body;
+    const { fullNames, email, phone, experience } = req.body;
+    const { resume = {} } = req.files;
     const today = new Date();
     const day = today.toLocaleDateString();
     const date = moment(day).format("DD/MM/YYYY");
@@ -96,7 +97,7 @@ export default class homeController {
 
     const Resume = await uploadResume(resume);
 
-    if (Resume || !Resume) {
+    if (Resume) {
       db.getConnection((err, connection) => {
         if (err) console.log("ConnectionError", err);
         else {
@@ -106,7 +107,6 @@ export default class homeController {
             phone,
             resume: Resume,
             experience,
-            motivation,
             date,
             job_id: id,
             status
@@ -118,6 +118,7 @@ export default class homeController {
                 message: "Application sent succesfully"
               });
             }
+            connection.release();
           });
         }
       });
