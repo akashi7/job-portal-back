@@ -258,4 +258,27 @@ export default class userController {
       }
     });
   }
+
+  static empViewNumberOfJobs(req, res) {
+    const { empId } = req.user;
+    db.getConnection((err, connection) => {
+      if (err) console.log("connectionError", err);
+      else {
+        connection.query("SELECT COUNT(*) AS alljobs  FROM jobs WHERE emp_id=?", [empId], (err, result) => {
+          if (err) console.log("querryError", err);
+          else {
+            res.send({
+              status: 200,
+              data: result
+            });
+          }
+          connection.release();
+        });
+      }
+    });
+  }
+  static empViewAllApplicants(req, res) {
+
+  }
+
 }

@@ -86,7 +86,7 @@ export default class homeController {
 
   static async userApplyJob(req, res) {
 
-    const { id } = req.query;
+    const { id, emp_id } = req.query;
 
     const { fullNames, email, phone, experience } = req.body;
     const { resume = {} } = req.files;
@@ -109,7 +109,8 @@ export default class homeController {
             experience,
             date,
             job_id: id,
-            status
+            status,
+            emp_id
           }, (err, result) => {
             if (err) console.log("QuerryError", err);
             else {

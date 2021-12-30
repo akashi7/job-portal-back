@@ -29,7 +29,6 @@ export default class validation {
   }
 
   static updatePassValidation(req, res, next) {
-    console.log("bodey", req.body);
     const { password } = req.body;
     const { error } = appSchema.updatePassword.validate({ password });
     if (error) {

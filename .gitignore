@@ -5,3 +5,4 @@
 # misc
 .env.env
 node_modulessendgrid.env
+sendgrid.env

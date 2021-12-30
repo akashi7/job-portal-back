@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
   res.send('Server running ok');
 });
 
-scheduleJob('*/2 * * * *', () => { disableDueJobs(); });
+// scheduleJob('*/2 * * * *', () => { disableDueJobs(); });
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
