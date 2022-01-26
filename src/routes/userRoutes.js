@@ -38,11 +38,25 @@ userRouter.get('/oneJob', isLoggedIn.isEmployerLoggedIn, userController.viewOneJ
 userRouter.get('/allApplicants', isLoggedIn.isEmployerLoggedIn, userController.viewApplicants);
 userRouter.get('/oneApplicant', isLoggedIn.isEmployerLoggedIn, userController.viewOneApplicant);
 userRouter.delete("/removeJob", isLoggedIn.isEmployerLoggedIn, userController.expireDate);
-
-
-
-
-
-
+userRouter.get('/applicantsList', isLoggedIn.isEmployerLoggedIn, userController.empViewAllApplicantsList);
+userRouter.get("/selectedApplicants", isLoggedIn.isEmployerLoggedIn, userController.empSeeSelectedApplicationsList);
+userRouter.get('/notviewedApplicants', isLoggedIn.isEmployerLoggedIn, userController.empSeeNotSeenApplicationsList);
+userRouter.get('/newApplicants', isLoggedIn.isEmployerLoggedIn, userController.empSeeNewApplicationsList);
+userRouter.get("/numberOfJobs", isLoggedIn.isEmployerLoggedIn, userController.empViewNumberOfJobs);
+userRouter.get("/numberOfApplicants", isLoggedIn.isEmployerLoggedIn, userController.empViewAllApplicants);
+userRouter.get("/numberOfSelected", isLoggedIn.isEmployerLoggedIn, userController.empSeeSelectedApplications);
+userRouter.get("/numberOfNotviewedApplicants", isLoggedIn.isEmployerLoggedIn, userController.empSeeNotViewedApplications);
+userRouter.get("/numberOfNewApplicants", isLoggedIn.isEmployerLoggedIn, userController.empSeeNewApplications);
+userRouter.get("/jobCategories", isLoggedIn.isEmployerLoggedIn, userController.EmpJobCategories);
+userRouter.post("/filtercategory", isLoggedIn.isEmployerLoggedIn, userController.FilterCategories);
+userRouter.get("/jobTitles", isLoggedIn.isEmployerLoggedIn, userController.EmpJobTitles);
+userRouter.post("/filterJobsApplications", isLoggedIn.isEmployerLoggedIn, userController.FilterJobTitles);
+userRouter.post("/filterSelectedJobsApplications", isLoggedIn.isEmployerLoggedIn, userController.FilterJobsSelectedApplicants);
+userRouter.post("/filterNotSeenJobsApplications", isLoggedIn.isEmployerLoggedIn, userController.FilterJobsNotViewedApplicants);
+userRouter.post("/filterNewJobsApplications", isLoggedIn.isEmployerLoggedIn, userController.FilterJobsNewApplicants);
+userRouter.patch("/selectApplicant", isLoggedIn.isEmployerLoggedIn, userController.selectApplicant);
+userRouter.get("/nOfOneJobApplicants", isLoggedIn.isEmployerLoggedIn, userController.empCountNbrOfApplicantForOneJob);
+userRouter.get("/nOfOneJobUnseenApplicants", isLoggedIn.isEmployerLoggedIn, userController.empCountNbrOfUnSeenApplicantForOneJob);
+userRouter.get("/nOfOneJobSelectedApplicants", isLoggedIn.isEmployerLoggedIn, userController.empCountNbrOfSelectedApplicantForOneJob);
 
 export default userRouter;

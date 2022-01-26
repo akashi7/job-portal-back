@@ -41,15 +41,19 @@ export default class homeController {
     });
   }
 
-
   static userViewCategory(req, res) {
 
     const { categoryName } = req.query;
 
+    let date = new Date();
+    let dateString = date.toLocaleDateString();
+
+    let today = moment(dateString).format("YYYY/MM/DD");
+
     db.getConnection((err, connection) => {
       if (err) console.log("ConnectionError", err);
       else {
-        connection.query("SELECT * FROM jobs WHERE  job_category =? ORDER BY id DESC ", [categoryName], (err, result) => {
+        connection.query("SELECT * FROM jobs WHERE  job_category =? AND expiry_date < ? ORDER BY id DESC ", [categoryName, today], (err, result) => {
           if (err) console.log("QuerryError", err);
           else {
             res.send({
@@ -86,7 +90,7 @@ export default class homeController {
 
   static async userApplyJob(req, res) {
 
-    const { id, emp_id } = req.query;
+    const { id, emp_id, job_title } = req.query;
 
     const { fullNames, email, phone, experience } = req.body;
     const { resume = {} } = req.files;
@@ -94,6 +98,7 @@ export default class homeController {
     const day = today.toLocaleDateString();
     const date = moment(day).format("DD/MM/YYYY");
     let status = 'new';
+    let selected = 'false';
 
     const Resume = await uploadResume(resume);
 
@@ -110,7 +115,9 @@ export default class homeController {
             date,
             job_id: id,
             status,
-            emp_id
+            emp_id,
+            selected,
+            job_title
           }, (err, result) => {
             if (err) console.log("QuerryError", err);
             else {
