@@ -4,7 +4,8 @@
   "description": "new application for testing",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon --exec babel-node ./src/"
+    "server": "nodemon --exec babel-node ./src/",
+    "start": "babel-node ./src/"
   },
   "author": "akashi",
   "license": "ISC",
