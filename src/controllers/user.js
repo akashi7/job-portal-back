@@ -1,7 +1,7 @@
 import { db } from "../config/database";
 import { hash, compare } from "bcryptjs";
 import cloudinary from "../config/cloudinary";
-import moment from "moment";
+import moment from "moment-timezone";
 
 
 
@@ -77,7 +77,7 @@ export default class userController {
     const Dates = new Date();
     const TodayMoment = Dates.toLocaleDateString();
     const Today = moment(TodayMoment).format("YYYY/MM/DD");
-    const newDeadLine = moment(deadLine).format("YYYY-MM-DD HH:mm:ss");
+    const newDeadLine = moment(deadLine).tz('Africa/Kigali');
 
     console.log("body", req.body);
     console.log("date", newDeadLine);
