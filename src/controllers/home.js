@@ -50,10 +50,12 @@ export default class homeController {
 
     let today = moment(dateString).format("YYYY/MM/DD");
 
+    let string = Date.parse(today);
+
     db.getConnection((err, connection) => {
       if (err) console.log("ConnectionError", err);
       else {
-        connection.query("SELECT * FROM jobs WHERE  job_category =? AND DATE(expiry_date) <= ? ORDER BY id DESC ", [categoryName, today], (err, result) => {
+        connection.query("SELECT * FROM jobs WHERE  job_category =? AND DATE(expiry_date) <= ? ORDER BY id DESC ", [categoryName, string], (err, result) => {
           if (err) console.log("QuerryError", err);
           else {
             res.send({
