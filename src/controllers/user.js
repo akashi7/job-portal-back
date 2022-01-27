@@ -78,7 +78,12 @@ export default class userController {
     const TodayMoment = Dates.toLocaleDateString();
     const Today = moment(TodayMoment).format("YYYY/MM/DD");
 
+    const DeadLine = new Date(deadLine).toLocaleString();
+
+    const newDeadLine = moment(DeadLine).format("YYYY-MM-DD HH:mm:ss");
+
     console.log("body", req.body);
+    console.log("date", newDeadLine);
 
 
     const JobDocument = await uploadJobDoc(document);
@@ -99,7 +104,7 @@ export default class userController {
             description,
             job_title: jobTitle,
             experience,
-            expiry_date: deadLine
+            expiry_date: newDeadLine
           }, (err, result) => {
             if (err) console.log("QuerryError", err);
             else {
