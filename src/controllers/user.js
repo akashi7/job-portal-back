@@ -77,10 +77,7 @@ export default class userController {
     const Dates = new Date();
     const TodayMoment = Dates.toLocaleDateString();
     const Today = moment(TodayMoment).format("YYYY/MM/DD");
-
-    const DeadLine = new Date(deadLine).toLocaleString();
-
-    const newDeadLine = moment(DeadLine).format("YYYY-MM-DD HH:mm:ss");
+    const newDeadLine = moment(deadLine).format("YYYY-MM-DD HH:mm:ss");
 
     console.log("body", req.body);
     console.log("date", newDeadLine);
