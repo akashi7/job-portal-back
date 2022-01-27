@@ -78,6 +78,7 @@ export default class userController {
     const TodayMoment = Dates.toLocaleDateString();
     const Today = moment(TodayMoment).format("YYYY/MM/DD");
 
+    console.log("body", req.body);
 
 
     const JobDocument = await uploadJobDoc(document);
