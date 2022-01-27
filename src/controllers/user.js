@@ -82,7 +82,7 @@ export default class userController {
 
     const JobDocument = await uploadJobDoc(document);
 
-
+    //YYYY-MM-DD HH:mm:ss
     if (JobDocument) {
       db.getConnection((err, connection) => {
         if (err) console.log("connectionError", err);
