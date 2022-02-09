@@ -47,14 +47,14 @@ export default class homeController {
 
     let date = new Date();
     let dateString = date.toLocaleDateString();
-
     let today = moment(dateString).format("YYYY/MM/DD");
-
+    let Today = today.replaceAll('/', '-');
+    const newDate = Today.replaceAll('-', '');
 
     db.getConnection((err, connection) => {
       if (err) console.log("ConnectionError", err);
       else {
-        connection.query("SELECT * FROM jobs WHERE  job_category =? AND DATE(expiry_date) <= ? ORDER BY id DESC ", [categoryName, today], (err, result) => {
+        connection.query("SELECT * FROM jobs WHERE  job_category =? AND due_date > ? ORDER BY id DESC ", [categoryName, newDate], (err, result) => {
           if (err) console.log("QuerryError", err);
           else {
             res.send({
@@ -141,6 +141,32 @@ export default class homeController {
       });
     }
 
+  }
+
+  static countJobs(req, res) {
+
+    const { categoryName } = req.query;
+    let date = new Date();
+    let dateString = date.toLocaleDateString();
+    let today = moment(dateString).format("YYYY/MM/DD");
+    let Today = today.replaceAll('/', '-');
+    const newDate = Today.replaceAll('-', '');
+
+    db.getConnection((err, connection) => {
+      if (err) console.log("ConnectionError", err);
+      else {
+        connection.query("SELECT COUNT(*) AS nbrOfJobs FROM jobs WHERE job_category=? AND due_date > ?", [categoryName, newDate], (err, result) => {
+          if (err) console.log("QuerryError", err);
+          else {
+            res.send({
+              status: 200,
+              data: result
+            });
+          }
+          connection.release();
+        });
+      }
+    });
   }
 
 

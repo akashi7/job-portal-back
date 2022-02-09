@@ -24,6 +24,7 @@ homeRouter.get("/jobsCategories", homeController.viewJobsCategories);
 homeRouter.get('/viewAllJobs', homeController.userViewCategory);
 homeRouter.get("/viewJob", homeController.userViewJob);
 homeRouter.post('/applyJob', validation.applyJobValidation, homeController.userApplyJob);
+homeRouter.get('/countJobs', homeController.countJobs);
 
 
 

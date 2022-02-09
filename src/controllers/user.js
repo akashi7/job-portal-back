@@ -1,7 +1,7 @@
 import { db } from "../config/database";
 import { hash, compare } from "bcryptjs";
 import cloudinary from "../config/cloudinary";
-import moment from "moment-timezone";
+import moment from "moment";
 
 
 
@@ -69,7 +69,6 @@ export default class userController {
   static async empPostJob(req, res) {
 
     let postionNumber, newPositions;
-
     const { id, full_names, company } = req.user;
     const { jobCategory, jobType, jobTitle, description, experience, deadLine } = req.body;
     const { document = {} } = req.files;
@@ -77,13 +76,13 @@ export default class userController {
     const Dates = new Date();
     const TodayMoment = Dates.toLocaleDateString();
     const Today = moment(TodayMoment).format("YYYY/MM/DD");
-    const newDeadLine = moment(deadLine).tz('Africa/Kigali');
 
-    console.log("body", req.body);
-    console.log("date", newDeadLine);
+    const DeadLine = moment(deadLine).format("YYYY/MM/DD");
 
+    const due_date = DeadLine.replaceAll('/', '');
 
     const JobDocument = await uploadJobDoc(document);
+
 
     //YYYY-MM-DD HH:mm:ss
     if (JobDocument) {
@@ -101,7 +100,8 @@ export default class userController {
             description,
             job_title: jobTitle,
             experience,
-            expiry_date: newDeadLine
+            expiry_date: DeadLine,
+            due_date
           }, (err, result) => {
             if (err) console.log("QuerryError", err);
             else {
